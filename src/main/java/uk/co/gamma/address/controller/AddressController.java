@@ -44,9 +44,19 @@ public class AddressController {
     @GetMapping
     public List<Address> list(@RequestParam(value = "postcode", required = false) String postcode) {
         if (StringUtils.isNotBlank(postcode)) {
-            return addressService.getByPostcode(postcode);
+            if (isBlackListedPostcode(postcode)) {
+                return List.of();
+            } else {
+                return addressService.getByPostcode(postcode);
+            }
         }
         return addressService.getAll();
+    }
+
+    private boolean isBlackListedPostcode(String postcode) {
+        List<String> blacklistedPostcodes = blackListService.getBlacklistedPostcodes();
+        
+        return blacklistedPostcodes.contains(postcode);
     }
 
     @ApiResponse(responseCode = "200", description = "Address returned", content = @Content(schema = @Schema(implementation = Address.class)))

@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Random;
+import java.util.ArrayList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,7 +64,6 @@ public class BlackListService {
                     throw new RuntimeException(e);
                 }
                 zones = loadFile();
-
             }
         });
 
@@ -94,5 +94,18 @@ public class BlackListService {
             logger.error("Exception reading resource " + e);
         }
         return List.of();
+    }
+
+    public List<String> getBlacklistedPostcodes() {
+        List<String> blacklistedPostcodes = new ArrayList<>();
+        try {
+            List<Zone> blacklistedZones = getAll();
+            for (Zone zone : blacklistedZones) {
+                blacklistedPostcodes.add(zone.getPostCode());
+            }
+            return blacklistedPostcodes;
+        } catch (IOException | InterruptedException e) {
+            return blacklistedPostcodes;
+        }
     }
 }
