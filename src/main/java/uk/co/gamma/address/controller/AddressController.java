@@ -4,6 +4,8 @@ import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+
+import java.io.IOException;
 import java.util.List;
 import javax.validation.Valid;
 import org.apache.commons.lang3.StringUtils;
@@ -26,7 +28,7 @@ import uk.co.gamma.address.model.Address;
 import uk.co.gamma.address.service.AddressService;
 import uk.co.gamma.address.service.BlackListService;
 
-@RestController
+@RestController 
 @RequestMapping(value = "/addresses", produces = MediaType.APPLICATION_JSON_VALUE)
 @Validated
 public class AddressController {
@@ -42,7 +44,7 @@ public class AddressController {
 
     @ApiResponse(responseCode = "200", description = "Returns list of all addresses", content = @Content(array = @ArraySchema(schema = @Schema(implementation = Address.class))))
     @GetMapping
-    public List<Address> list(@RequestParam(value = "postcode", required = false) String postcode) {
+    public List<Address> list(@RequestParam(value = "postcode", required = false) String postcode) throws IOException, InterruptedException{
         if (StringUtils.isNotBlank(postcode)) {
             if (isBlackListedPostcode(postcode)) {
                 return List.of();
@@ -53,7 +55,7 @@ public class AddressController {
         return addressService.getAll();
     }
 
-    private boolean isBlackListedPostcode(String postcode) {
+    private boolean isBlackListedPostcode(String postcode) throws IOException, InterruptedException{
         List<String> blacklistedPostcodes = blackListService.getBlacklistedPostcodes();
         
         return blacklistedPostcodes.contains(postcode);

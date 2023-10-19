@@ -2,6 +2,7 @@ package uk.co.gamma.address.service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -15,6 +16,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 import uk.co.gamma.address.model.Address;
 import uk.co.gamma.address.model.Zone;
+
 /**
  * IMPORTANT This service is simulating an API that is slow and throws errors.
  * Please do not change it when performing the coding task.
@@ -30,7 +32,6 @@ public class BlackListService {
 
     private final Random random = new Random();
     private List<Zone> zones;
-
 
     @Autowired
     BlackListService(ObjectMapper objectMapper) {
@@ -96,16 +97,12 @@ public class BlackListService {
         return List.of();
     }
 
-    public List<String> getBlacklistedPostcodes() {
+    public List<String> getBlacklistedPostcodes() throws IOException, InterruptedException{
         List<String> blacklistedPostcodes = new ArrayList<>();
-        try {
-            List<Zone> blacklistedZones = getAll();
-            for (Zone zone : blacklistedZones) {
-                blacklistedPostcodes.add(zone.getPostCode());
-            }
-            return blacklistedPostcodes;
-        } catch (IOException | InterruptedException e) {
-            return blacklistedPostcodes;
+        List<Zone> blacklistedZones = getAll();
+        for (Zone zone : blacklistedZones) {
+            blacklistedPostcodes.add(zone.getPostCode());
         }
+        return blacklistedPostcodes;
     }
 }

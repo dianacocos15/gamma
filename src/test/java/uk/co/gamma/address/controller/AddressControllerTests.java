@@ -18,6 +18,8 @@ import uk.co.gamma.address.model.Address;
 import uk.co.gamma.address.service.AddressService;
 import uk.co.gamma.address.service.BlackListService;
 
+import java.io.IOException;
+
 @ExtendWith(MockitoExtension.class)
 class AddressControllerTests {
 
@@ -32,7 +34,7 @@ class AddressControllerTests {
 
     @DisplayName("list() - Given no addresses, then an empty list is returned")
     @Test
-    void list_when_noAddresses_then_returnEmptyList() {
+    void list_when_noAddresses_then_returnEmptyList() throws IOException, InterruptedException{
 
         given(addressService.getAll()).willReturn(List.of());
 
@@ -43,7 +45,7 @@ class AddressControllerTests {
 
     @DisplayName("list() - Given addresses, then the full list is returned")
     @Test
-    void list_when_multipleAddresses_then_allAddressesReturned() {
+    void list_when_multipleAddresses_then_allAddressesReturned() throws IOException, InterruptedException{
 
         List<Address> expected = List.of(
                 new Address(1, "King's House", "Kings Road West", "Newbury", "RG14 5BY"),
@@ -60,7 +62,7 @@ class AddressControllerTests {
 
     @DisplayName("list(postcode) - Given addresses are present with postcode, then the matching list is returned")
     @Test
-    void list_when_matchingAddresses_then_matchingAddressesReturned() {
+    void list_when_matchingAddresses_then_matchingAddressesReturned() throws IOException, InterruptedException{
 
         List<Address> expected = List.of(
                 new Address(1, "King's House", "Kings Road West", "Newbury", "RG14 5BY")
